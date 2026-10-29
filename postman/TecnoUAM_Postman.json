@@ -1,0 +1,827 @@
+{
+  "info": {
+    "_postman_id": "85e205fc-5622-42c1-8c83-8b9c426e28ee",
+    "name": "TecnoUAM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43886958"
+  },
+  "item": [
+    {
+      "name": "LogADMIN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "if (pm.response.code === 200) pm.collectionVariables.set(\"adminToken\", pm.response.json().token);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"admin\",\"password\":\"{{adminPassword}}\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "log user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "if (pm.response.code === 200) pm.collectionVariables.set(\"userToken\", pm.response.json().token);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"user\",\"password\":\"{{userPassword}}\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Credenciales inco",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"incota\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar como USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/equipos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Sin token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/equipos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ]
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "crear con user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 403\", function () { pm.response.to.have.status(403); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"TEC-SIN-PERMISO-{{$timestamp}}\",\n  \"nombre\": \"Laptop Lenovo IdeaPad\",\n  \"tipo\": \"PORTATIL\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear equipo ADMIN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "if (pm.response.code === 201) pm.collectionVariables.set(\"equipoId\", pm.response.json().id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"TEC-{{$timestamp}}-TAB\",\n  \"nombre\": \"Tableta Samsung Galaxy Tab A9\",\n  \"tipo\": \"TABLETA\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar equipo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ctualizar equipo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"TEC-{{$timestamp}}-TAB-ACT\",\n  \"nombre\": \"Tableta Samsung Galaxy Tab A9 - Actualizada\",\n  \"tipo\": \"TABLETA\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar présta",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "if (pm.response.code === 201) pm.collectionVariables.set(\"prestamoId\", pm.response.json().id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"equipoId\": \"{{equipoId}}\",\n  \"solicitante\": \"María Fernanda Ruiz\",\n  \"fechaPrestamo\": \"2026-10-28\",\n  \"fechaPrevistaDevolucion\": \"2026-11-06\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/prestamos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "prestamos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "intentar prestar otra vez",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"equipoId\": \"{{equipoId}}\",\n  \"solicitante\": \"Carlos Alberto Mendoza\",\n  \"fechaPrestamo\": \"2026-10-28\",\n  \"fechaPrevistaDevolucion\": \"2026-11-08\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/prestamos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "prestamos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "eliminación con préstamo activo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar préstamos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/prestamos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "prestamos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verificar equipo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Equipo disponible\", function () { pm.expect(pm.response.json().estado).to.eql(\"DISPONIBLE\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "bloquear segunda devolución",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/prestamos/{{prestamoId}}/devolver",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "prestamos",
+            "{{prestamoId}}",
+            "devolver"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear equipo para eliminar",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "if (pm.response.code === 201) pm.collectionVariables.set(\"equipoBorrableId\", pm.response.json().id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"UAM-{{$timestamp}}-B\",\n  \"nombre\": \"Proyector Epson PowerLite\",\n  \"tipo\": \"PROYECTOR\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar equipo sin historial",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoBorrableId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoBorrableId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validar fechas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"equipoId\": \"{{equipoId}}\",\n  \"solicitante\": \"Maria Fernanda Ruiz\",\n  \"fechaPrestamo\": \"2026-11-02\",\n  \"fechaPrevistaDevolucion\": \"2026-10-28\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/prestamos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "prestamos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "eliminar equipo prestado",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/equipos/{{equipoId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "devolver",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/prestamos/{{prestamoId}}/devolver",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "prestamos",
+            "{{prestamoId}}",
+            "devolver"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "adminPassword",
+      "value": ""
+    },
+    {
+      "key": "userPassword",
+      "value": ""
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "userToken",
+      "value": ""
+    },
+    {
+      "key": "equipoId",
+      "value": ""
+    },
+    {
+      "key": "prestamoId",
+      "value": ""
+    },
+    {
+      "key": "equipoBorrableId",
+      "value": ""
+    }
+  ]
+}
